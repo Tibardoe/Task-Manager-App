@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task</title>
+    <link rel="stylesheet" href="/css/task.css">
+</head>
+
+<body>
+    <header>
+        <div class="header-container">
+            <div class="top-buttons">
+                <button onclick="openPopup('.log-in')" class="login">Login</button>
+                <button onclick="openPopup('.sign-up')" class="sign-up">Sign Up</button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="hero">
+            <div class="text-box">
+                <h1 class="hero-text">
+                    Manage Task Effortlessly
+                </h1>
+                <p>
+                    A user-friendly task app, that lets you do more!
+                </p>
+            </div>
+
+            <div class="picture-container">
+                <img src="/images/flat-lay-notebook-with-list-desk.jpg" alt="notebook picure">
+            </div>
+        </div>
+
+        <!-- Login Forms -->
+        <div class="log-in pop-up">
+            <form action="/login" class="inputs" method="post">
+                <h2>Login</h2>
+                <div class="input-box">
+                    <input type="text" name="username" placeholder="username" required>
+                </div>
+
+                <div class="input-box">
+                    <input type="password" name="password" placeholder="password" required>
+                </div>
+
+                <button class="login btn" type="submit">Login</button>
+            </form>
+        </div>
+
+        <!-- SignUp forms -->
+        <div class="sign-up pop-up">
+            <form action="/register" class="inputs" method="post">
+                <h2>Sign Up</h2>
+                <div class="input-box">
+                    <input type="text" name="username" placeholder="Enter new username" required>
+                </div>
+
+                <div class="input-box">
+                    <input type="password" name="password" placeholder="Enter password" required>
+                </div>
+
+                <div class="input-box">
+                    <input type="password" name="passwordrepeated" placeholder="Re-enter password" required>
+                </div>
+
+                <button class="signin btn" type="submit">Register</button>
+            </form>
+        </div>
+    </main>
+    <footer></footer>
+
+    <div class="overlay" onclick="closePopup()"></div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script>
+        function openPopup(popupClass) {
+            $('.overlay').addClass('active');
+            $(popupClass).addClass('active');
+        }
+
+        function closePopup() {
+            $('.overlay').removeClass('active');
+            $('.pop-up').removeClass('active');
+        }
+
+    </script>
+</body>
+
+</html>

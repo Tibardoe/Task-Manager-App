@@ -1,0 +1,121 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --headerBackground: #2564cf;
+    --bodyBackground: #faf9f8;
+    --inputBackground: #ffffff;
+    --fontStyle: Segoe, "Segoe UI", Arial, "sans-serif";
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: var(--bodyBackground);
+}
+
+/* Header */
+
+header {
+    background-color: var(--headerBackground);
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px;
+}
+
+.header-container>* {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.header-right>p {
+    color: white;
+    font-weight: 600;
+}
+
+.header-middle {
+    background-color: white;
+    border-radius: 5px;
+    padding: 5px;
+    width: 30%;
+}
+
+.search-input {
+    outline: none;
+    border: none;
+    flex: 1;
+}
+
+.icon {
+    height: 25px;
+    background: none;
+    display: block;
+}
+
+.button {
+    background: none;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+}
+
+/* Main */
+
+.below-header-container {
+    display: flex;
+    justify-content: space-between;
+    width: 95%;
+    margin: 20px auto;
+}
+
+.below-header-container>* {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.add-task-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 95%;
+    margin: 0 auto;
+    background-color: white;
+    padding: 15px 30px;
+    box-shadow: 0 0 5px rgba(103, 100, 100, 0.3);
+}
+
+.task-item {
+    background-color: white;
+    width: 95%;
+    margin: 20px auto;
+    box-shadow: 0 0 5px rgba(103, 100, 100, 0.3);
+    padding: 10px 0;
+}
+
+.task-item>* {
+    display: grid;
+    grid-template-columns: 0.2fr 2fr 1fr 1fr;
+    grid-template-rows: 1fr;
+    margin: 0;
+    padding: 0;
+}
+
+.content,
+.title {
+    padding: 10px;
+}
+
+.add {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}

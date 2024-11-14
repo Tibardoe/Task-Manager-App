@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager App</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body>
+    <header>
+        <div class="header-container">
+            <div class="header-right">
+                <button title="App Launcher" class="app-launcher button">
+                    <img src="/images/Box Box Menu.svg" alt="App launcher icon" class="app-launcher icon">
+                </button>
+                <p>To Do</p>
+            </div>
+
+            <div class="header-middle">
+                <button class="search button" title="Search">
+                    <img src="/images/Search.svg" alt="Search icon" class="search icon">
+                </button>
+
+                <input type="text" class="search-input" placeholder="Search">
+
+            </div>
+
+            <div class="header-right">
+                <button class="settings button" title="Settings">
+                    <img src="/images/Setting.svg" alt="Settings icon" class="settings icon">
+                </button>
+
+                <button class="Help button" title="Help">
+                    <img src="/images/Help.svg" alt="Help icon" class="help icon">
+                </button>
+
+                <button class="announce button" title="Announce">
+                    <img src="/images/Announce.svg" alt="Announce icon" class="announce icon">
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="below-header-container">
+            <div class="below-header-right">
+                <button class="menu button" title="Menu">
+                    <img src="/images/stripes menu.svg" alt="Menu icon" class="menu icon">
+                </button>
+
+                <p>My Day</p>
+
+                <button class="list-option button" title="List option menu">
+                    <img src="/images/options.svg" alt="List option menu icon" class="list-option icon">
+                </button>
+
+                <button class="list button" title="Grid">
+                    <img src="/images/Grid.svg" alt="Grid icon" class="grid icon">Grid
+                </button>
+
+                <button class="grid button" title="List">
+                    <img src="/images/List.svg" alt="List icon" class="list icon">List
+                </button>
+            </div>
+
+            <div class="below-header-left">
+                <button class="sort button" title="Sort">
+                    <img src="/images/sort.svg" alt="Sort icon" class="sort icon">
+                </button>
+
+                <button class="suggestion button" title="Suggestions">
+                    <img src="/images/bulb.svg" alt="Suggestions icon" class="suggestion icon">Suggestions
+                </button>
+            </div>
+        </div>
+
+        <div class="add-task-section">
+            <form class="add">
+                <button class="add button" type="button" onclick="enableAddTask()">
+                    <img src="/images/Plus.svg" alt="Add icon" class="add icon">
+                </button>
+
+                <p>Add task</p>
+            </form>
+        </div>
+
+        <div class="task-item">
+            <div class="item-header">
+                <div></div>
+                <div class="title"><span>Title</span></div>
+                <div>Due Date</div>
+                <div>Importance</div>
+            </div>
+
+            <% items.forEach(item=> { %>
+                <div class="item-content">
+                    <div>
+                        <span class="checkmark"></span>
+                    </div>
+                    <div class="content">
+                        <p ondblclick="updateItem(this)" data-id="<%= item.id %>">
+                            <%= item.content %>
+                        </p>
+                    </div>
+                    <div class="calendar"></div>
+                    <div class="favourate"></div>
+                </div>
+                <% }); %>
+
+
+        </div>
+    </main>
+
+    <footer></footer>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script>
+        function enableAddTask() {
+            const addButon = $(".add.button");
+            const addTask = $(".add>p");
+            const addTaskSection = $(".add-task-section");
+            const taskContainer = $(".task-item")
+
+            addButon.on("click", (event) => {
+                event.preventDefault();
+                if (addTaskSection.find("input").length === 0) {
+                    const input = $("<input>", {
+                        type: "text",
+                        placeholder: "Add task",
+                        class: "search-input",
+                        name: "taskContent"
+                    });
+
+                    input.css("fontSize", "1rem")
+
+                    addTask.hide();
+
+                    addTaskSection.append(input);
+
+                    input.focus();
+
+                    input.on("keypress", (event) => {
+                        if (event.key === "Enter") {
+                            const taskText = input.val().trim();
+                            if (taskText) {
+                                $.ajax({
+                                    url: "/add",
+                                    method: "post",
+                                    data: { content: taskText },
+                                    success: (response) => {
+                                        const newContent = $(`
+                            <div class="item-content">
+                                <div>
+                                    <span class="checkmark"></span>
+                                </div>
+                                <div class="content">
+                                    <p>${response.content}</p >
+                                </div >
+                                <div class="calendar"></div>
+                                <div class="favourate"></div>
+                            </div > `);
+
+                                        taskContainer.append(newContent);
+
+                                        input.val("");
+                                    }
+                                })
+                            };
+                        }
+                    });
+                }
+            });
+        };
+
+        function updateItem(item) {
+            const currentItem = $(item);
+            const currentItemText = $(item).text();
+            const itemId = currentItem.data('id');
+
+            const editArea = $("<input>", {
+                type: "text",
+                value: currentItemText,
+                class: "search-input",
+                name: "content"
+            });
+
+            function saveChanges() {
+                const updatedItem = editArea.val().trim();
+
+                if (!updatedItem) {
+                    alert("Content cannot be empty");
+                    return;
+                }
+
+                if (isNaN(itemId)) {
+                    console.error('Invalid item ID');
+                    alert('Invalid item ID');
+                    return;
+                }
+
+                $.ajax({
+                    url: `/edit/${itemId}`,
+                    type: "PATCH",
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        content: updatedItem
+                    }),
+
+                    success: (response) => {
+                        currentItem.text(updatedItem);
+                        editArea.replaceWith(currentItem);
+                    },
+
+                    error: function (error) {
+                        console.error("Error updating item: ", error);
+
+                        alert("There was an error updating the item.");
+
+                    }
+                });
+            }
+
+            editArea.on("blur", saveChanges);
+
+            editArea.on("keypress", (event) => {
+                if (event.key === "Enter") {
+                    saveChanges()
+                }
+            });
+
+            currentItem.replaceWith(editArea);
+            editArea.focus();
+        };
+    </script>
+</body>
+
+</html>
