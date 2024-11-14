@@ -34,6 +34,7 @@ app.post("/login", async (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
     const result = await db.query("SELECT * FROM user_account");
+    const content = await db.query("SELECT * FROM content");
     const accounts = result.rows;
 
     let userAuthenticated = false;
@@ -53,7 +54,7 @@ app.post("/login", async (req, res) => {
     }
 
     if (userAuthenticated) {
-        res.render("task.ejs", { items: accounts });
+        res.render("task.ejs", { items: content.rows });
     } else if (passwordIncorrect) {
         res.status(401).json("Incorrect password");
     } else {
@@ -122,6 +123,27 @@ app.patch("/edit/:id", async (req, res) => {
     } catch (error) {
         console.error("Database update error:", error);
         res.status(500).json({ message: "An error occurred while updating the item" });
+    }
+});
+
+app.delete("/delete/:id", async (req, res) => {
+    const id = parseInt(req.params.id);
+
+    if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid ID format" });
+    }
+
+    try {
+        const result = await db.query("DELETE FROM content WHERE id = $1", [id]);
+
+        if (result.rowCount > 0) {
+            res.status(200).json({ message: "Item deleted successfully" });
+        } else {
+            res.status(404).json({ message: "Item not found" });
+        }
+    } catch (error) {
+        console.error("Database delete error:", error);
+        res.status(500).json({ message: "An error occurred while deleting the item" });
     }
 });
 

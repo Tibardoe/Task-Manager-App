@@ -95,9 +95,9 @@
             </div>
 
             <% items.forEach(item=> { %>
-                <div class="item-content">
-                    <div>
-                        <span class="checkmark"></span>
+                <div class="item-content" data-id="<%= item.id %>">
+                    <div class="checkmark-circle" onclick="toggleCheckmark(this)">
+                        <span class="checkmark">&#10003;</span>
                     </div>
                     <div class="content">
                         <p ondblclick="updateItem(this)" data-id="<%= item.id %>">
@@ -233,6 +233,32 @@
             currentItem.replaceWith(editArea);
             editArea.focus();
         };
+
+        function toggleCheckmark(element) {
+            const taskElement = $(element).closest(".item-content");
+            const taskId = taskElement.data("id");
+
+            // Toggle checked class for strikethrough effect
+            taskElement.toggleClass("checked");
+
+            // If the task is checked, delete it from the database
+            if (taskElement.hasClass("checked")) {
+                $.ajax({
+                    url: `/delete/${taskId}`,
+                    method: "DELETE",
+                    success: (response) => {
+                        console.log(response.message);
+                        taskElement.remove();  // Remove the task from the DOM
+                    },
+                    error: (error) => {
+                        console.error("Error deleting item: ", error);
+                        alert("There was an error deleting the item.");
+                    }
+                });
+            }
+        }
+
+
     </script>
 </body>
 

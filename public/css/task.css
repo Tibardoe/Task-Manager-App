@@ -181,6 +181,12 @@ main {
     background-color: #353f40;
 }
 
+.checked .content p {
+    text-decoration: line-through;
+    color: grey;
+}
+
+
 .input-box {
     margin: 10px 0;
 }

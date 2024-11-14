@@ -119,3 +119,33 @@ header {
     align-items: center;
     gap: 10px;
 }
+
+.checkmark-circle {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background-color: #fff;
+    border: 2px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #4CAF50;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    margin: auto;
+}
+
+.checkmark-circle.checked {
+    background-color: #4CAF50;
+    color: #fff;
+}
+
+.checkmark {
+    display: none;
+}
+
+.checkmark-circle.checked .checkmark {
+    display: inline;
+}
